@@ -3,3 +3,6 @@ venv/
 
 #4gcf
 get-token
+
+#config.cfg
+.env
