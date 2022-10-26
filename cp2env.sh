@@ -22,6 +22,7 @@ heroku config:set CHANNEL_ACCESS_TOKEN=$CHANNEL_ACCESS_TOKEN --app g2l
 heroku config:set CHANNEL_SECRET=$CHANNEL_SECRET --app g2l
 heroku config:set TEST_USER_ID=$TEST_USER_ID --app g2l
 
+git init
 git remote add heroku https://git.heroku.com/g2l.git
 git add .
 git commit -m "auto deploy"
