@@ -1,11 +1,11 @@
 #!/bin/bash
 
+source ./.env
+
 read -p "Have you deleted the heroku app? (y/n): " yn
 if [ $yn!="y" ]; then
-    heroku apps:destroy --app g2l --confirm g2l
+    heroku apps:destroy --app $APP_NAME --confirm $APP_NAME
 fi
-
-source ./.env
 
 if [ -d $REMOVE_DIR ]; then
     rm -rf $REMOVE_DIR
@@ -13,19 +13,23 @@ else
     echo "dir is not exist."
 fi
 
-cp -r g2l-server ../../production/g2l-env
-cd ../../production/g2l-env
+cp -r g2l-server $PRODUCTION_DIR
+cd $PRODUCTION_DIR
 
 heroku login
-heroku create g2l
-heroku config:set CHANNEL_ACCESS_TOKEN=$CHANNEL_ACCESS_TOKEN --app g2l
-heroku config:set CHANNEL_SECRET=$CHANNEL_SECRET --app g2l
-heroku config:set TEST_USER_ID=$TEST_USER_ID --app g2l
+heroku create $APP_NAME
+heroku config:set CHANNEL_ACCESS_TOKEN=$CHANNEL_ACCESS_TOKEN --app $APP_NAME
+heroku config:set CHANNEL_SECRET=$CHANNEL_SECRET --app $APP_NAME
+heroku config:set TEST_USER_ID=$TEST_USER_ID --app $APP_NAME
+
+repos_dir="https://git.heroku.com/${APP_NAME}.git"
+today=`date`
+commit_message="auto deploy ${today}"
 
 git init
-git remote add heroku https://git.heroku.com/g2l.git
+git remote add heroku $repos_dir
 git add .
-git commit -m "auto deploy"
+git commit -m $commit_message
 git push heroku master
 
 heroku open
